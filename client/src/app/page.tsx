@@ -9,7 +9,8 @@ export default function Home() {
     <main className={styles.main}>
       <h1> 👋 Hey There</h1>
       <p className={styles.description}>
-        I'm Sourav and I'm a Software Engineer. Connect your Ethereum wallet and
+        `I'm Sourav and I'm a Software Engineer. Connect your Ethereum wallet
+        and`
       </p>
       <div className={styles.center}>
         <button style={{ height: "35px", width: "150px" }}>
