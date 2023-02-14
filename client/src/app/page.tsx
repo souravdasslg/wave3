@@ -1,21 +1,44 @@
-import Image from "next/image";
-import { Inter } from "@next/font/google";
+'use client';
 import styles from "./page.module.css";
+import {useMetaMask} from "@/hooks/useMetaMask";
+import {useWavePortal} from "@/hooks/useWavePortal";
+import {useCallback, useEffect, useState} from "react";
 
-const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+
+export default function Main() {
+    const { metamaskAccount, requestMetaMaskAccounts} = useMetaMask()
+    const {wave, getWaves, initialWaves} = useWavePortal()
+    const [waves, setWaves] = useState([])
+    const  onClickWave = useCallback(async ()=>{
+        await wave()
+        setWaves(await getWaves())
+
+    },[getWaves, wave])
+
+
   return (
     <main className={styles.main}>
-      <h1> 👋 Hey There</h1>
+      <h1 className={styles.h1}> 👋 Hey There</h1>
       <p className={styles.description}>
         {`I'm Sourav and I'm a Software Engineer. Connect your Ethereum wallet
         and`}
       </p>
-      <div className={styles.center}>
-        <button style={{ height: "35px", width: "150px" }}>
-          👋 Wave at me
-        </button>
+      <div >
+          {!metamaskAccount ?
+              <button className={styles.button} onClick={requestMetaMaskAccounts}>Connect Wallet</button>:
+              <button className={styles.button} onClick={onClickWave}>👋 Wave at me</button>
+          }
+
+          {(initialWaves??waves).map((wave, index) => {
+              return (
+                  <div key={index} style={{  marginTop: "16px", padding: "8px" }}>
+                      <div>Address: {wave?.address}</div>
+                      <div>Time: {wave?.timestamp.toString()}</div>
+                      <div>Message: {wave?.message}</div>
+                  </div>)
+          })}
+
       </div>
     </main>
   );
